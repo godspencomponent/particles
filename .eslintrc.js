@@ -8,6 +8,7 @@ module.exports = {
     'html'
   ],
   'rules': {
+    "no-unused-vars": 0,
     "eol-last": 0,
     "no-extra-boolean-cast": 0,
     "no-eval": 0,

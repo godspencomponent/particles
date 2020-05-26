@@ -1,5 +1,3 @@
-
-
 <template>
   <div class="page" @mousemove="mousemove" @mouseup="mouseup">
     <div>
@@ -28,7 +26,9 @@
         :h="componentSize.height"
       >
         <div class="sizeTip">组件显示区域({{componentSize.width}}*{{componentSize.height}})</div>
-        <com v-bind="componentProps" ref="component"></com>
+        <div class="node" :style="style">
+          <com v-bind="componentProps" ref="component"></com>
+        </div>
       </vue-drag-resize>
       <div class="block editor" :style="editerStyle">
         <div class="title" @click="editerActive=true" @mousedown="mousedown" @mouseup="mouseup">编辑面板</div>
@@ -54,6 +54,7 @@
   import Toast from './components/Toast'
   import MessageBox from 'mint-ui/message-box/'
   import 'mint-ui/message-box/style.css'
+  import pkg from '../package.json'
 
   export default {
     components: {Toast, Loading, ImgViewer, example, com, Editor, Attribute},
@@ -124,6 +125,11 @@
     },
     data () {
       return {
+        style: Object.assign({}, pkg.style, {
+          'background-image': 'url(https://vue-particles.netlify.app/static/img/sky.871d198.jpg)',
+          'background-size': 'cover',
+          'height': '500px'
+        }),
         // 开发过程的分辨率选项
         sizes: {
           'Mobile S': {
@@ -147,7 +153,7 @@
             height: 720
           }
         },
-        sizeIndex: 'Mobile S',
+        sizeIndex: 'Desktop',
         isInit: false, // 是否初始化完成
         editerActive: false, // 编辑面板是否要拖拽了
         componentSize: { // 组件当前的大小
@@ -155,7 +161,7 @@
           height: 480
         },
         editerPanel: {
-          x: 600,
+          x: 960,
           y: 0,
           active: false,
           org: {x: 0, y: 0},
@@ -164,27 +170,6 @@
 
         // 组件开发的时候，配置传入的默认参数，按需修改，这里面的字段一般需要和  src/index.vue 里面的props的key保持一致
         componentProps: {
-          reanderType: 'canvas',
-          packageType: 'common',
-          datasourcekey: '',
-          option: {
-            title: {
-              text: 'ECharts 入门示例'
-            },
-            tooltip: {},
-            legend: {
-              data: ['销量']
-            },
-            xAxis: {
-              data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
-            },
-            yAxis: {},
-            series: [{
-              name: '销量',
-              type: 'bar',
-              data: [5, 20, 36, 10, 10, 20]
-            }]
-          }
         },
       }
     },
@@ -272,6 +257,12 @@
         border: 1px solid red;
         box-shadow: 0px 5px 10px 0px #ccc;
         position: absolute;
+
+        &.active {
+          &::before {
+            display none
+          }
+        }
 
         .sizeTip {
           bottom: -26px;
